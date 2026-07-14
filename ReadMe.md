@@ -1,5 +1,5 @@
 mvn clean install
-
+webhook test
 mvn clean install -U
 
 mvn dependency:tree
