@@ -3,22 +3,33 @@ services:
     image: mongo:latest
     container_name: mongo
     restart: always
+    ports:
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin123
-    ports:
-      - "27017:27017"
     networks:
       - payment-network
 
   payment:
     image: payment
-    container_name: pay123
+    container_name: payment-service
     restart: always
     ports:
       - "8088:8088"
     depends_on:
       - mongo
+    networks:
+      - payment-network
+
+  gui:
+    image: payment-gui
+    container_name: payment-gui
+    restart: always
+    ports:
+      - "8501:8501"
+    depends_on:
+      - payment
     networks:
       - payment-network
 

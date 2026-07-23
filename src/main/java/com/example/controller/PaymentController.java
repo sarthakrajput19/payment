@@ -74,12 +74,20 @@ public class PaymentController {
      */
 
     @PostMapping("/initiate")
-    public ResponseEntity<Transaction> initiatePayment(@RequestBody PaymentRequest request) {
-        Transaction transaction = paymentService.initiatePayment(request.getCardNumber(), request.getCardType(),
+public ResponseEntity<?> initiatePayment(@RequestBody PaymentRequest request) {
+    try {
+        Transaction transaction = paymentService.initiatePayment(
+                request.getCardNumber(),
+                request.getCardType(),
                 request.getCvv(),
-                request.getAmount()); // Initiate payment using the service
-        return ResponseEntity.ok(transaction); // Return the transaction details with 200 status
+                request.getAmount());
+
+        return ResponseEntity.ok(transaction);
+
+    } catch (IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
+}
 
     /**
      * Endpoint to verify an OTP for a payment transaction.
@@ -89,26 +97,18 @@ public class PaymentController {
      */
 
     @PostMapping("/verify")
-    public ResponseEntity<Transaction> verifyOtp(@RequestBody OtpVerificationRequest request) {
-        Transaction transaction = paymentService.verifyOtp(request.getTransactionId(), request.getOtp()); // Verify OTP
-                                                                                                          // using the
-                                                                                                          // service
-        return ResponseEntity.ok(transaction); // Return the transaction details with 200 status
+public ResponseEntity<?> verifyOtp(@RequestBody OtpVerificationRequest request) {
+    try {
+        Transaction transaction = paymentService.verifyOtp(
+                request.getTransactionId(),
+                request.getOtp());
+
+        return ResponseEntity.ok(transaction);
+
+    } catch (IllegalArgumentException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
-
-    /**
-     * Endpoint to process a refund for a payment transaction.
-     * 
-     * @param transactionId The ID of the transaction to be refunded.
-     * @return ResponseEntity containing the refunded Transaction.
-     */
-
-    /**
-     * Endpoint to update a credit card's information.
-     * 
-     * @param creditCard The updated credit card details.
-     * @return ResponseEntity containing the updated CreditCard.
-     */
+}
 
     @PutMapping("/updatecard")
     public ResponseEntity<CreditCard> updateCreditCard(@RequestBody CreditCard creditCard) {
