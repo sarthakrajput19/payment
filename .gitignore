@@ -1,0 +1,8 @@
+target/
+venv/
+*.log
+error.txt
+.idea/
+.vscode/
+*.class
+*.jar
